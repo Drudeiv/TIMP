@@ -1,32 +1,27 @@
 #include <QtTest>
 #include "sha1.hpp"
+
 class Hash_Test : public QObject
 {
     Q_OBJECT
 
 public:
-    Hash_Test();
-    ~Hash_Test();
+    Hash_Test() {}
+    ~Hash_Test() {}
 
 private slots:
-    void makehash();
-
+    void testSha1Hashing();
 };
 
-Hash_Test::Hash_Test() { }
-
-Hash_Test::~Hash_Test() { }
-
-void Hash_Test::makehash()
+void Hash_Test::testSha1Hashing()
 {
+    QString input = "hello";
+    QByteArray result = messageToSha1(input);
 
-    std::string line = "hello";
-
-    SHA1 checksum;
-    checksum.update(line);
-    const std::string hash = checksum.final();
-    QCOMPARE(hash, (std::string)"aaf4c61ddcc5e8a2dabede0f3b482cd9aea9434d");
-
+    // Проверяем, что хеш корректный
+    QVERIFY(result.contains("aaf4c61ddcc5e8a2dabede0f3b482cd9aea9434d")); // SHA-1 "hello"
+    QVERIFY(result.contains("Hashing message: hello")); // Проверяем отладочный вывод
 }
+
 QTEST_APPLESS_MAIN(Hash_Test)
 #include "test_hash.moc"
